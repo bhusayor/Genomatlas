@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us — GenomAtlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050a0f;
+    --bg2: #080e16;
+    --bg3: #0c1520;
+    --surface: #0f1d2b;
+    --surface2: #142436;
+    --border: rgba(0,210,180,0.12);
+    --border2: rgba(0,210,180,0.25);
+    --teal: #00d2b4;
+    --teal2: #00f5d4;
+    --blue: #1a6bff;
+    --orange: #ff6b35;
+    --text: #e8f4f2;
+    --text2: #8ab5b0;
+    --text3: #4a7a75;
+    --font-display: 'Syne', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+    --font-body: 'IBM Plex Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,210,180,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,210,180,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5vw;
+    height: 68px;
+    background: rgba(5,10,15,0.88);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+    color: var(--teal);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--text); }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text2);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover, .nav-links a.active { color: var(--teal); }
+
+  .nav-cta {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--teal);
+    border: none;
+    padding: 9px 20px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .nav-cta:hover { background: var(--teal2); }
+
+  /* HERO */
+  .about-hero {
+    position: relative;
+    padding: 160px 5vw 100px;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 800px; height: 800px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,210,180,0.07) 0%, transparent 65%);
+    top: -200px; right: -200px;
+    pointer-events: none;
+  }
+
+  .hero-glow2 {
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,107,53,0.05) 0%, transparent 70%);
+    bottom: -100px; left: 10%;
+    pointer-events: none;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.1s forwards;
+  }
+
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 24px; height: 1px;
+    background: var(--teal);
+  }
+
+  .about-hero h1 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    max-width: 900px;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.2s forwards;
+  }
+
+  .about-hero h1 em { font-style: normal; color: var(--teal); }
+
+  .about-hero p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text2);
+    max-width: 620px;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.35s forwards;
+  }
+
+  /* DIVIDER LINE */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: var(--border);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* MISSION */
+  .mission-section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 5vw;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    background: var(--bg2);
+  }
+
+  .mission-left h2 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2rem, 4vw, 3rem);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+  }
+
+  .mission-left h2 em { font-style: normal; color: var(--teal); }
+
+  .mission-left p {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--text2);
+    margin-bottom: 1.2rem;
+  }
+
+  .mission-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5px;
+    background: var(--border);
+  }
+
+  .value-card {
+    background: var(--surface);
+    padding: 2rem;
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+    transition: background 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .value-card::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--teal);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.3s;
+  }
+
+  .value-card.orange::after { background: var(--orange); }
+  .value-card.blue::after { background: #6b9fff; }
+
+  .value-card:hover { background: var(--surface2); }
+  .value-card:hover::after { transform: scaleY(1); }
+
+  .value-num {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 2rem;
+    letter-spacing: -0.05em;
+    color: var(--teal);
+    line-height: 1;
+    flex-shrink: 0;
+    width: 48px;
+  }
+
+  .value-card.orange .value-num { color: var(--orange); }
+  .value-card.blue .value-num { color: #6b9fff; }
+
+  .value-body h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.01em;
+  }
+
+  .value-body p {
+    font-size: 0.83rem;
+    line-height: 1.65;
+    color: var(--text2);
+  }
+
+  /* STORY TIMELINE */
+  .story-section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 5vw;
+    background: var(--bg);
+  }
+
+  .story-header { margin-bottom: 4rem; }
+
+  .story-header h2 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2rem, 4vw, 3rem);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+
+  .timeline {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 120px;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: var(--border2);
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 0;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .timeline-item:last-child { border-bottom: none; }
+
+  .t-year {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    color: var(--teal);
+    padding-right: 2rem;
+    padding-top: 4px;
+  }
+
+  .t-dot {
+    position: absolute;
+    left: 116px;
+    top: 2.8rem;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--teal);
+    box-shadow: 0 0 10px var(--teal);
+    z-index: 2;
+  }
+
+  .t-dot.orange { background: var(--orange); box-shadow: 0 0 10px var(--orange); }
+  .t-dot.blue { background: #6b9fff; box-shadow: 0 0 10px #6b9fff; }
+
+  .t-content { padding-left: 2.5rem; }
+
+  .t-content h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  .t-content p {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--text2);
+  }
+
+  /* TEAM */
+  .team-section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 5vw;
+    background: var(--bg2);
+  }
+
+  .team-header { margin-bottom: 3.5rem; }
+
+  .team-header h2 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2rem, 4vw, 3rem);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 0.8rem;
+  }
+
+  .team-header p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--text2);
+    max-width: 520px;
+  }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5px;
+    background: var(--border);
+  }
+
+  .team-card {
+    background: var(--bg2);
+    padding: 2.5rem 2rem;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .team-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--teal), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s;
+  }
+
+  .team-card.orange::before { background: linear-gradient(90deg, var(--orange), transparent); }
+  .team-card.blue::before { background: linear-gradient(90deg, #6b9fff, transparent); }
+
+  .team-card:hover { background: var(--surface); }
+  .team-card:hover::before { transform: scaleX(1); }
+
+  .team-avatar {
+    width: 56px; height: 56px;
+    border: 1px solid var(--border2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    background: var(--surface);
+  }
+
+  .team-card h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.3rem;
+  }
+
+  .team-role {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 1rem;
+  }
+
+  .team-card.orange .team-role { color: var(--orange); }
+  .team-card.blue .team-role { color: #6b9fff; }
+
+  .team-card p {
+    font-size: 0.82rem;
+    line-height: 1.65;
+    color: var(--text2);
+    margin-bottom: 1.2rem;
+  }
+
+  .team-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .team-tag {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    padding: 3px 8px;
+    border: 1px solid var(--border2);
+    color: var(--text3);
+    text-transform: uppercase;
+  }
+
+  /* PARTNERS */
+  .partners-section {
+    position: relative;
+    z-index: 1;
+    padding: 80px 5vw;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .partners-section .section-label { margin-bottom: 2.5rem; opacity: 1; }
+
+  .partners-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.5px;
+    background: var(--border);
+  }
+
+  .partner-item {
+    background: var(--surface);
+    padding: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.7rem;
+    text-align: center;
+    transition: background 0.25s;
+  }
+
+  .partner-item:hover { background: var(--surface2); }
+
+  .partner-icon { font-size: 1.6rem; }
+
+  .partner-name {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    line-height: 1.5;
+  }
+
+  /* ETHICS */
+  .ethics-section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 5vw;
+    background: var(--bg2);
+  }
+
+  .ethics-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .ethics-left h2 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 1.2rem;
+  }
+
+  .ethics-left h2 em { font-style: normal; color: var(--teal); }
+
+  .ethics-left p {
+    font-size: 0.92rem;
+    line-height: 1.8;
+    color: var(--text2);
+    margin-bottom: 1rem;
+  }
+
+  .ethics-principles {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5px;
+    background: var(--border);
+  }
+
+  .principle {
+    background: var(--surface);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    transition: background 0.25s;
+  }
+
+  .principle:hover { background: var(--surface2); }
+
+  .principle-icon {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    border: 1px solid var(--border2);
+    margin-top: 2px;
+  }
+
+  .principle-body h5 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .principle-body p {
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: var(--text2);
+  }
+
+  /* CTA BANNER */
+  .cta-section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 5vw;
+    background: var(--bg);
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .cta-glow {
+    position: absolute;
+    width: 600px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(0,210,180,0.08) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .cta-section h2 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2rem, 5vw, 4rem);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 1.2rem;
+  }
+
+  .cta-section h2 em { font-style: normal; color: var(--teal); }
+
+  .cta-section p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text2);
+    max-width: 480px;
+    margin: 0 auto 2.5rem;
+  }
+
+  .cta-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--teal);
+    color: var(--bg);
+    border: none;
+    padding: 14px 32px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+    font-weight: 700;
+  }
+
+  .btn-primary:hover { background: var(--teal2); transform: translateY(-2px); }
+
+  .btn-outline {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--teal);
+    border: 1px solid var(--teal);
+    padding: 14px 32px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+  }
+
+  .btn-outline:hover { background: rgba(0,210,180,0.08); transform: translateY(-2px); }
+
+  /* FOOTER */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 60px 5vw 30px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .footer-brand h2 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: var(--teal);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.8rem;
+  }
+
+  .footer-brand p {
+    font-size: 0.85rem;
+    line-height: 1.65;
+    color: var(--text3);
+    max-width: 280px;
+  }
+
+  .footer-col h4 {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 1.2rem;
+  }
+
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+
+  .footer-col a {
+    font-size: 0.85rem;
+    color: var(--text3);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-col a:hover { color: var(--teal); }
+
+  .footer-bottom {
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-bottom p {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    color: var(--text3);
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .mission-section { grid-template-columns: 1fr; gap: 3rem; }
+    .ethics-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .timeline::before { left: 80px; }
+    .timeline-item { grid-template-columns: 80px 1fr; }
+    .t-dot { left: 76px; }
+  }
+
+  @media (max-width: 600px) {
+    .footer-grid { grid-template-columns: 1fr; }
+    .team-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html"><span>Genom</span>Atlas</a>
+  <ul class="nav-links">
+    <a href="about us.html">About us</a></li>
+    <li><a href="Research.html">Research</a></li>
+    <li><a href="Contribute">Contribute</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="index.html#community" class="nav-cta">Submit Data</a>
+</nav>
+
+<!-- HERO -->
+<section class="about-hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+
+  <div class="section-label">About GenomAtlas</div>
+
+  <h1>
+    Science Without<br>
+    <em>Borders.</em><br>
+    Data Without Bias.
+  </h1>
+
+  <p>
+    GenomAtlas was founded on a simple but urgent conviction: the world's most critical health data belongs to everyone — especially to the communities most burdened by disease. We are a global, open-access scientific platform bridging research gaps between the US, Africa, and the rest of the world.
+  </p>
+</section>
+
+<div class="divider"></div>
+
+<!-- MISSION -->
+<section class="mission-section reveal">
+  <div class="mission-left">
+    <div class="section-label" style="opacity:1;">Our Mission</div>
+    <h2>Closing the Global<br><em>Health Data Gap</em></h2>
+    <p>
+      African populations account for over 17% of the world's population but represent less than 3% of published genomic research. The consequences are devastating — drugs, diagnostics, and risk models built on biased data fail the people who need them most.
+    </p>
+    <p>
+      GenomAtlas exists to fix that. We aggregate, curate, and democratize health data — from cancer genomics to Alzheimer's biomarkers — with a dedicated focus on US populations and the 54 nations of Africa. We build AI tools designed to work in low-resource settings. And we connect researchers across continents to collaborate, share, and get feedback.
+    </p>
+    <p>
+      This is not charity. This is science done right.
+    </p>
+  </div>
+
+  <div class="mission-right">
+    <div class="value-card">
+      <div class="value-num">01</div>
+      <div class="value-body">
+        <h4>Equity First</h4>
+        <p>Every decision — from dataset curation to AI model training — is evaluated for its equity implications. Underrepresented populations are not an afterthought; they are our priority.</p>
+      </div>
+    </div>
+    <div class="value-card orange">
+      <div class="value-num">02</div>
+      <div class="value-body">
+        <h4>Open by Default</h4>
+        <p>All data, tools, and publications on GenomAtlas are open access wherever legally and ethically possible. Science progresses fastest when knowledge is shared freely.</p>
+      </div>
+    </div>
+    <div class="value-card blue">
+      <div class="value-num">03</div>
+      <div class="value-body">
+        <h4>Rigorously Scientific</h4>
+        <p>Peer review, transparent methodology, and reproducibility are non-negotiable. We hold every submission — including our own — to the highest scientific standards.</p>
+      </div>
+    </div>
+    <div class="value-card">
+      <div class="value-num">04</div>
+      <div class="value-body">
+        <h4>Community Powered</h4>
+        <p>GenomAtlas grows through its contributors. Researchers, clinicians, and data scientists from Lagos to Los Angeles shape what we build and what we prioritize.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORY / TIMELINE -->
+<section class="story-section">
+  <div class="story-header reveal">
+    <div class="section-label" style="opacity:1;">Our Story</div>
+    <h2>How We Got Here</h2>
+  </div>
+
+  <div class="timeline reveal">
+    <div class="timeline-item">
+      <div class="t-year">2019</div>
+      <div class="t-dot"></div>
+      <div class="t-content">
+        <h4>The Idea Forms</h4>
+        <p>Frustrated by the near-total absence of African genomic data in landmark cancer studies, our founders — computational biologists working between Accra and Baltimore — begin assembling a private research consortium. The question: what would a truly global cancer database look like?</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="t-year">2020</div>
+      <div class="t-dot orange"></div>
+      <div class="t-content">
+        <h4>First Datasets, First Partnerships</h4>
+        <p>The consortium digitizes and anonymizes 8,000 breast cancer records from Nigerian teaching hospitals — the first step toward a pan-African oncology repository. Partnership agreements signed with three US research universities and two African academic medical centers.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="t-year">2021</div>
+      <div class="t-dot blue"></div>
+      <div class="t-content">
+        <h4>Platform Launch & AI Division</h4>
+        <p>GenomAtlas launches publicly with 1,200 curated datasets. The AI & Computational Biology division is established, releasing the first version of CancerSeq AI — trained on multi-ethnic genomic data. First preprint published with 14 co-authors across 6 countries.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="t-year">2022</div>
+      <div class="t-dot"></div>
+      <div class="t-content">
+        <h4>Alzheimer's Research Program Begins</h4>
+        <p>Growing evidence that Alzheimer's biomarkers and risk factors differ substantially across ancestries prompts the launch of a dedicated neurodegeneration research program. NeuroRisk Engine v1.0 released. Collaboration established with US-based Alzheimer's research centers.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="t-year">2023</div>
+      <div class="t-dot orange"></div>
+      <div class="t-content">
+        <h4>Federated Learning & Rural Deployment</h4>
+        <p>FedHealth framework enables 14 African hospitals to collaboratively train AI models without sharing raw patient data. PathVision deployed in 6 rural East African clinics for cervical cancer screening. Repository crosses 10,000 dataset milestone.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="t-year">2024–25</div>
+      <div class="t-dot blue"></div>
+      <div class="t-content">
+        <h4>Today: 14,800+ Datasets, 62 Countries</h4>
+        <p>GenomAtlas is now the largest open-access repository of health data focused on African and underrepresented global populations. With 940 active contributors, 6 AI tools, and a growing community of researchers, we are just getting started.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="team-section">
+  <div class="team-header reveal">
+    <div class="section-label" style="opacity:1;">The Team</div>
+    <h2>The Researchers Behind<br>GenomAtlas</h2>
+    <p>A multidisciplinary team of scientists, engineers, and public health experts united by a shared commitment to equitable, open science.</p>
+  </div>
+
+  <div class="team-grid reveal">
+    <div class="team-card">
+      <div class="team-avatar">👩🏾‍🔬</div>
+      <h3>Dr. Amara Osei</h3>
+      <div class="team-role">Founder & Executive Director</div>
+      <p>Computational biologist with 15 years researching cancer genomics in West Africa and the US. Pioneer in pan-African GWAS methodology. Johns Hopkins & University of Ghana.</p>
+      <div class="team-tags">
+        <span class="team-tag">Genomics</span>
+        <span class="team-tag">GWAS</span>
+        <span class="team-tag">Cancer Bio</span>
+      </div>
+    </div>
+
+    <div class="team-card orange">
+      <div class="team-avatar">👨🏿‍💻</div>
+      <h3>Dr. Kofi Mensah</h3>
+      <div class="team-role">Head of AI & Computational Biology</div>
+      <p>Machine learning researcher specializing in health AI for low-resource settings. Developed the federated learning architecture powering FedHealth. MIT & AIMS Ghana.</p>
+      <div class="team-tags">
+        <span class="team-tag">ML/AI</span>
+        <span class="team-tag">Federated Learning</span>
+        <span class="team-tag">CompBio</span>
+      </div>
+    </div>
+
+    <div class="team-card blue">
+      <div class="team-avatar">👩🏻‍⚕️</div>
+      <h3>Dr. Rachel Chen</h3>
+      <div class="team-role">Director of Alzheimer's Research</div>
+      <p>Neurologist and proteomics researcher. Led landmark studies on tau phosphorylation differences across ancestries. Stanford University School of Medicine.</p>
+      <div class="team-tags">
+        <span class="team-tag">Neurology</span>
+        <span class="team-tag">Proteomics</span>
+        <span class="team-tag">Alzheimer's</span>
+      </div>
+    </div>
+
+    <div class="team-card">
+      <div class="team-avatar">👨🏾‍🔬</div>
+      <h3>Dr. Emeka Nwosu</h3>
+      <div class="team-role">Head of Database & Data Curation</div>
+      <p>Epidemiologist and biostatistician. Architected GenomAtlas's curation pipeline and FAIR data standards. University of Lagos & London School of Hygiene.</p>
+      <div class="team-tags">
+        <span class="team-tag">Epidemiology</span>
+        <span class="team-tag">Biostatistics</span>
+        <span class="team-tag">FAIR Data</span>
+      </div>
+    </div>
+
+    <div class="team-card orange">
+      <div class="team-avatar">👩🏽‍💻</div>
+      <h3>Naledi Dlamini</h3>
+      <div class="team-role">Lead Engineer & Platform Architect</div>
+      <p>Full-stack engineer and data infrastructure specialist. Built the core API, database architecture, and FedHealth deployment pipeline. University of Cape Town.</p>
+      <div class="team-tags">
+        <span class="team-tag">Engineering</span>
+        <span class="team-tag">API Design</span>
+        <span class="team-tag">Infrastructure</span>
+      </div>
+    </div>
+
+    <div class="team-card blue">
+      <div class="team-avatar">👨🏻‍🔬</div>
+      <h3>Dr. James Okafor</h3>
+      <div class="team-role">Director of Community & Partnerships</div>
+      <p>Public health researcher and global health advocate. Manages institutional partnerships across 20+ African academic medical centers and US research universities.</p>
+      <div class="team-tags">
+        <span class="team-tag">Public Health</span>
+        <span class="team-tag">Partnerships</span>
+        <span class="team-tag">Advocacy</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNERS -->
+<section class="partners-section">
+  <div class="section-label">Institutional Partners</div>
+  <div class="partners-grid reveal">
+    <div class="partner-item">
+      <div class="partner-icon">🏛️</div>
+      <div class="partner-name">University of Lagos<br>College of Medicine</div>
+    </div>
+    <div class="partner-item">
+      <div class="partner-icon">🧪</div>
+      <div class="partner-name">Johns Hopkins<br>Bloomberg School</div>
+    </div>
+    <div class="partner-item">
+      <div class="partner-icon">🏥</div>
+      <div class="partner-name">Korle Bu Teaching<br>Hospital, Ghana</div>
+    </div>
+    <div class="partner-item">
+      <div class="partner-icon">🔬</div>
+      <div class="partner-name">AIMS Pan-African<br>Network</div>
+    </div>
+    <div class="partner-item">
+      <div class="partner-icon">🌍</div>
+      <div class="partner-name">African Academy<br>of Sciences</div>
+    </div>
+    <div class="partner-item">
+      <div class="partner-icon">🏛️</div>
+      <div class="partner-name">Stanford<br>Medicine</div>
+    </div>
+    <div class="partner-item">
+      <div class="partner-icon">💊</div>
+      <div class="partner-name">NIH National<br>Cancer Institute</div>
+    </div>
+    <div class="partner-item">
+      <div class="partner-icon">🧬</div>
+      <div class="partner-name">H3Africa<br>Consortium</div>
+    </div>
+  </div>
+</section>
+
+<!-- ETHICS -->
+<section class="ethics-section">
+  <div class="ethics-inner reveal">
+    <div class="ethics-left">
+      <div class="section-label" style="opacity:1;">Ethics & Data Governance</div>
+      <h2>Data Sovereignty<br>is <em>Non-Negotiable</em></h2>
+      <p>
+        We believe that the people whose data is collected must always benefit from its use. GenomAtlas enforces strict data sovereignty principles: all datasets retain full attribution to their source institution and community. No data is commercialized without explicit consent.
+      </p>
+      <p>
+        All human subject data submissions require documented ethical approval from recognized IRBs or RECs. We follow FAIR (Findable, Accessible, Interoperable, Reusable) principles for all data, and are committed to indigenous data sovereignty frameworks for African community data.
+      </p>
+    </div>
+
+    <div class="ethics-principles">
+      <div class="principle">
+        <div class="principle-icon">🔐</div>
+        <div class="principle-body">
+          <h5>Ethical Review Required</h5>
+          <p>All human subject datasets require documented IRB or REC approval before submission is accepted.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-icon">⚖️</div>
+        <div class="principle-body">
+          <h5>FAIR Data Principles</h5>
+          <p>Every dataset on GenomAtlas must meet Findable, Accessible, Interoperable, and Reusable standards.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-icon">🌍</div>
+        <div class="principle-body">
+          <h5>Community Attribution</h5>
+          <p>Source communities and institutions are always credited. Data cannot be republished or commercialized without explicit permission.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-icon">🚫</div>
+        <div class="principle-body">
+          <h5>No Data Exploitation</h5>
+          <p>GenomAtlas will never sell, license for profit, or share data with commercial entities without documented community consent.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-icon">🔒</div>
+        <div class="principle-body">
+          <h5>Anonymization Standards</h5>
+          <p>All individual-level data is de-identified per HIPAA and international equivalents before publication on the platform.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="section-label" style="justify-content:center;opacity:1;">Join the Mission</div>
+  <h2>Build the Future of<br><em>Global Health Science</em></h2>
+  <p>Whether you're a researcher in Nairobi or New York, a clinician with patient data or an engineer with a model — there is a place for you in GenomAtlas.</p>
+  <div class="cta-actions">
+    <a href="index.html#community" class="btn-primary">Submit Your Research →</a>
+    <a href="index.html#database" class="btn-outline">Explore the Database</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <h2>GenomAtlas</h2>
+      <p>An open scientific platform for global public health research, with a focus on cancer, Alzheimer's disease, and AI-driven computational biology for the US, Africa, and the world.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <ul>
+        <li><a href="index.html#database">Database</a></li>
+        <li><a href="index.html#ai">AI Tools</a></li>
+        <li><a href="#">API Access</a></li>
+        <li><a href="index.html#community">Submit Data</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Research</h4>
+      <ul>
+        <li><a href="#">Cancer Biology</a></li>
+        <li><a href="#">Alzheimer's</a></li>
+        <li><a href="#">Comp. Biology</a></li>
+        <li><a href="#">Publications</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>About</h4>
+      <ul>
+        <li><a href="about.html">Mission</a></li>
+        <li><a href="about.html">Team</a></li>
+        <li><a href="about.html">Ethics Policy</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 GenomAtlas — Global Health Research Repository</p>
+    <p>Built for science. Built for equity.</p>
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

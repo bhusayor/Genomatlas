@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research & Publications — GenomAtlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050a0f;
+    --bg2: #080e16;
+    --bg3: #0c1520;
+    --surface: #0f1d2b;
+    --surface2: #142436;
+    --border: rgba(0,210,180,0.12);
+    --border2: rgba(0,210,180,0.25);
+    --teal: #00d2b4;
+    --teal2: #00f5d4;
+    --orange: #ff6b35;
+    --blue: #1a6bff;
+    --text: #e8f4f2;
+    --text2: #8ab5b0;
+    --text3: #4a7a75;
+    --font-display: 'Syne', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+    --font-body: 'IBM Plex Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,210,180,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,210,180,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5vw; height: 68px;
+    background: rgba(5,10,15,0.88);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--font-display); font-weight: 800; font-size: 1.4rem;
+    letter-spacing: -0.02em; color: var(--teal); text-decoration: none;
+  }
+  .nav-logo span { color: var(--text); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text2); text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--teal); }
+  .nav-cta {
+    font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--bg); background: var(--teal);
+    border: none; padding: 9px 20px; cursor: pointer; text-decoration: none; transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--teal2); }
+
+  /* ── HERO ── */
+  .page-hero {
+    position: relative; z-index: 1;
+    padding: 150px 5vw 80px;
+    overflow: hidden;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-glow {
+    position: absolute; width: 700px; height: 500px; border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(0,210,180,0.07) 0%, transparent 65%);
+    top: -100px; right: -100px; pointer-events: none;
+  }
+  .hero-glow2 {
+    position: absolute; width: 400px; height: 400px; border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(255,107,53,0.05) 0%, transparent 70%);
+    bottom: -50px; left: 15%; pointer-events: none;
+  }
+
+  .section-label {
+    font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--teal);
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 1rem;
+    opacity: 0; animation: fadeUp 0.6s 0.1s forwards;
+  }
+  .section-label::before {
+    content: ''; display: block; width: 24px; height: 1px; background: var(--teal);
+  }
+
+  .page-hero h1 {
+    font-family: var(--font-display); font-weight: 800;
+    font-size: clamp(2.8rem, 6vw, 5.5rem);
+    line-height: 0.97; letter-spacing: -0.03em;
+    max-width: 800px; margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeUp 0.7s 0.2s forwards;
+  }
+  .page-hero h1 em { font-style: normal; color: var(--teal); }
+
+  .page-hero p {
+    font-size: 1rem; line-height: 1.75; color: var(--text2); max-width: 580px;
+    opacity: 0; animation: fadeUp 0.7s 0.35s forwards;
+  }
+
+  /* Stats strip */
+  .hero-stats-strip {
+    display: flex; gap: 0; margin-top: 3.5rem;
+    border-top: 1px solid var(--border);
+    opacity: 0; animation: fadeUp 0.7s 0.5s forwards;
+  }
+  .hstat {
+    flex: 1; padding: 1.5rem 2rem; border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .hstat:last-child { border-right: none; }
+  .hstat-num {
+    font-family: var(--font-display); font-weight: 800; font-size: 1.9rem;
+    color: var(--teal); letter-spacing: -0.04em;
+  }
+  .hstat-num.orange { color: var(--orange); }
+  .hstat-num.blue { color: #6b9fff; }
+  .hstat-label {
+    font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text3);
+  }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    position: sticky; top: 68px; z-index: 90;
+    background: rgba(8,14,22,0.96); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 5vw;
+    display: flex; align-items: center; gap: 1rem;
+  }
+
+  .filter-scroll {
+    display: flex; gap: 0.5rem; overflow-x: auto; padding: 14px 0; flex: 1;
+    scrollbar-width: none;
+  }
+  .filter-scroll::-webkit-scrollbar { display: none; }
+
+  .fchip {
+    font-family: var(--font-mono); font-size: 0.63rem; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 6px 14px; white-space: nowrap;
+    border: 1px solid var(--border2); background: transparent;
+    color: var(--text2); cursor: pointer; transition: all 0.18s; flex-shrink: 0;
+  }
+  .fchip:hover { border-color: var(--teal); color: var(--teal); }
+  .fchip.active { background: var(--teal); color: var(--bg); border-color: var(--teal); }
+  .fchip.orange.active { background: var(--orange); border-color: var(--orange); }
+  .fchip.blue.active { background: #1a6bff; border-color: #1a6bff; }
+
+  .search-wrap {
+    position: relative; flex-shrink: 0;
+    padding: 10px 0;
+  }
+  .search-wrap input {
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text); font-family: var(--font-mono); font-size: 0.7rem;
+    letter-spacing: 0.04em; padding: 8px 14px 8px 36px;
+    outline: none; width: 220px; transition: border-color 0.2s;
+  }
+  .search-wrap input:focus { border-color: var(--teal); }
+  .search-icon {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    color: var(--text3); font-size: 0.8rem; pointer-events: none;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .main-layout {
+    position: relative; z-index: 1;
+    display: grid; grid-template-columns: 280px 1fr;
+    gap: 0; min-height: 100vh;
+    padding: 0 5vw;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    padding: 3rem 2.5rem 3rem 0;
+    border-right: 1px solid var(--border);
+    position: sticky; top: 120px; align-self: start;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border2) transparent;
+  }
+
+  .sidebar-section { margin-bottom: 2.5rem; }
+
+  .sidebar-title {
+    font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--teal); margin-bottom: 1rem;
+  }
+
+  .sidebar-links { display: flex; flex-direction: column; gap: 0.1rem; }
+
+  .slink {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 10px; cursor: pointer;
+    font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.04em;
+    color: var(--text2); transition: all 0.18s;
+    border: 1px solid transparent;
+    text-decoration: none;
+  }
+  .slink:hover { color: var(--teal); border-color: var(--border); background: var(--surface); }
+  .slink.active { color: var(--teal); background: rgba(0,210,180,0.06); border-color: var(--border2); }
+
+  .slink-count {
+    font-size: 0.58rem; background: var(--surface2);
+    padding: 2px 7px; color: var(--text3); border-radius: 99px;
+  }
+
+  .sidebar-divider { height: 1px; background: var(--border); margin: 1.5rem 0; }
+
+  .sort-select {
+    width: 100%; background: var(--surface); border: 1px solid var(--border);
+    color: var(--text2); font-family: var(--font-mono); font-size: 0.68rem;
+    letter-spacing: 0.04em; padding: 8px 12px; outline: none; cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .sort-select:focus { border-color: var(--teal); }
+  .sort-select option { background: var(--surface); }
+
+  /* ── PUBLICATIONS FEED ── */
+  .pub-feed { padding: 3rem 0 3rem 3rem; }
+
+  .feed-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 2rem; padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .feed-header span {
+    font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.08em;
+    color: var(--text3); text-transform: uppercase;
+  }
+  .view-toggle { display: flex; gap: 0; }
+  .vtbtn {
+    padding: 6px 12px; background: var(--surface); border: 1px solid var(--border);
+    cursor: pointer; color: var(--text3); font-size: 0.8rem; transition: all 0.2s;
+  }
+  .vtbtn.active, .vtbtn:hover { background: var(--teal); color: var(--bg); border-color: var(--teal); }
+
+  /* FEATURED PAPER */
+  .featured-paper {
+    background: var(--surface); border: 1px solid var(--border2);
+    padding: 2.5rem; margin-bottom: 1.5px; position: relative; overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .featured-paper::before {
+    content: 'FEATURED';
+    position: absolute; top: 1.5rem; right: 1.5rem;
+    font-family: var(--font-mono); font-size: 0.56rem; letter-spacing: 0.16em;
+    color: var(--teal); border: 1px solid rgba(0,210,180,0.4); padding: 3px 8px;
+  }
+  .featured-paper:hover { border-color: var(--teal); }
+  .featured-stripe {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--teal);
+  }
+  .featured-stripe.orange { background: var(--orange); }
+
+  /* PUB CARD */
+  .pub-card {
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 2rem; margin-bottom: 1.5px;
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 1.5rem; align-items: start;
+    transition: all 0.25s; cursor: pointer; position: relative; overflow: hidden;
+  }
+  .pub-card::after {
+    content: ''; position: absolute; bottom: 0; left: 0;
+    height: 1px; width: 0; background: var(--teal); transition: width 0.4s;
+  }
+  .pub-card:hover { background: var(--surface2); border-color: var(--border2); }
+  .pub-card:hover::after { width: 100%; }
+  .pub-card.orange::after { background: var(--orange); }
+  .pub-card.blue::after { background: #6b9fff; }
+
+  .pub-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.8rem; }
+
+  .ptag {
+    font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 3px 9px;
+    border: 1px solid rgba(0,210,180,0.3); color: var(--teal);
+    display: inline-block;
+  }
+  .ptag.orange { color: var(--orange); border-color: rgba(255,107,53,0.3); }
+  .ptag.blue { color: #6b9fff; border-color: rgba(107,159,255,0.3); }
+  .ptag.purple { color: #b48eff; border-color: rgba(180,142,255,0.3); }
+
+  .pub-title {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: 1.08rem; letter-spacing: -0.02em; line-height: 1.3;
+    margin-bottom: 0.6rem; color: var(--text);
+  }
+
+  .pub-authors {
+    font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.04em;
+    color: var(--text3); margin-bottom: 0.7rem;
+  }
+  .pub-authors span { color: var(--teal); }
+
+  .pub-abstract {
+    font-size: 0.85rem; line-height: 1.7; color: var(--text2); margin-bottom: 1rem;
+  }
+
+  .pub-meta {
+    display: flex; flex-wrap: wrap; gap: 1.5rem;
+    font-family: var(--font-mono); font-size: 0.6rem;
+    letter-spacing: 0.07em; color: var(--text3); text-transform: uppercase;
+  }
+  .pub-meta span { display: flex; align-items: center; gap: 5px; }
+
+  .pub-actions {
+    display: flex; flex-direction: column; gap: 0.5rem; flex-shrink: 0; min-width: 120px;
+  }
+
+  .btn-sm {
+    font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 8px 14px; text-align: center;
+    border: none; cursor: pointer; text-decoration: none; display: block;
+    transition: all 0.2s; white-space: nowrap;
+  }
+  .btn-sm-primary { background: var(--teal); color: var(--bg); }
+  .btn-sm-primary:hover { background: var(--teal2); }
+  .btn-sm-outline {
+    background: transparent; color: var(--text2);
+    border: 1px solid var(--border2);
+  }
+  .btn-sm-outline:hover { border-color: var(--teal); color: var(--teal); }
+
+  .cite-count {
+    text-align: center;
+    font-family: var(--font-mono); font-size: 0.58rem;
+    letter-spacing: 0.06em; color: var(--text3); text-transform: uppercase;
+    padding-top: 0.3rem;
+  }
+  .cite-num {
+    display: block; font-family: var(--font-display); font-weight: 800;
+    font-size: 1.4rem; color: var(--teal); letter-spacing: -0.03em;
+  }
+
+  /* PREPRINTS / WORKING PAPERS */
+  .preprint-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-left: 3px solid var(--orange);
+    padding: 1.8rem 2rem; margin-bottom: 1.5px;
+    display: flex; gap: 2rem; align-items: flex-start;
+    transition: background 0.25s; cursor: pointer;
+  }
+  .preprint-card:hover { background: var(--surface); }
+
+  .preprint-badge {
+    font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--orange);
+    border: 1px solid rgba(255,107,53,0.3); padding: 3px 8px;
+    flex-shrink: 0; margin-top: 3px;
+  }
+
+  .preprint-body { flex: 1; }
+  .preprint-body h4 {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: 0.98rem; letter-spacing: -0.02em; margin-bottom: 0.4rem;
+  }
+  .preprint-body p {
+    font-size: 0.82rem; line-height: 1.65; color: var(--text2); margin-bottom: 0.7rem;
+  }
+
+  /* METRICS ROW */
+  .metrics-row {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1.5px; background: var(--border);
+    margin-bottom: 3rem;
+  }
+  .metric-box {
+    background: var(--surface); padding: 1.8rem;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .metric-box::after {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 2px; background: var(--teal);
+  }
+  .metric-box.orange::after { background: var(--orange); }
+  .metric-box.blue::after { background: #6b9fff; }
+  .metric-box.purple::after { background: #b48eff; }
+  .metric-val {
+    font-family: var(--font-display); font-weight: 800;
+    font-size: 2.2rem; letter-spacing: -0.04em; color: var(--teal); margin-bottom: 0.3rem;
+  }
+  .metric-val.orange { color: var(--orange); }
+  .metric-val.blue { color: #6b9fff; }
+  .metric-val.purple { color: #b48eff; }
+  .metric-label {
+    font-family: var(--font-mono); font-size: 0.58rem;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3);
+  }
+
+  /* JOURNAL SECTION */
+  .section-divider {
+    display: flex; align-items: center; gap: 1rem;
+    margin: 3rem 0 1.5rem;
+  }
+  .section-divider h3 {
+    font-family: var(--font-display); font-weight: 800;
+    font-size: 1.1rem; letter-spacing: -0.02em; white-space: nowrap;
+  }
+  .section-divider-line { flex: 1; height: 1px; background: var(--border); }
+  .section-divider-tag {
+    font-family: var(--font-mono); font-size: 0.6rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text3); white-space: nowrap;
+  }
+
+  /* PAGINATION */
+  .pagination {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 2.5rem; padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .page-info {
+    font-family: var(--font-mono); font-size: 0.63rem;
+    letter-spacing: 0.08em; color: var(--text3); text-transform: uppercase;
+  }
+  .page-btns { display: flex; gap: 0.3rem; }
+  .page-btn {
+    font-family: var(--font-mono); font-size: 0.65rem;
+    padding: 7px 13px; background: var(--surface);
+    border: 1px solid var(--border); color: var(--text2);
+    cursor: pointer; transition: all 0.18s;
+  }
+  .page-btn:hover, .page-btn.active {
+    background: var(--teal); color: var(--bg); border-color: var(--teal);
+  }
+
+  /* SUBMIT CTA */
+  .submit-cta {
+    position: relative; z-index: 1;
+    background: var(--bg2); border-top: 1px solid var(--border);
+    padding: 80px 5vw;
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 3rem; align-items: center;
+  }
+  .submit-cta h2 {
+    font-family: var(--font-display); font-weight: 800;
+    font-size: clamp(1.8rem, 3vw, 2.6rem); letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  .submit-cta h2 em { font-style: normal; color: var(--teal); }
+  .submit-cta p {
+    font-size: 0.9rem; line-height: 1.7; color: var(--text2);
+    max-width: 500px; margin-top: 0.8rem;
+  }
+  .cta-btns { display: flex; flex-direction: column; gap: 0.8rem; flex-shrink: 0; }
+
+  .btn-primary {
+    font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.06em;
+    text-transform: uppercase; background: var(--teal); color: var(--bg);
+    border: none; padding: 13px 28px; cursor: pointer;
+    text-decoration: none; display: inline-block; transition: all 0.2s; font-weight: 700;
+  }
+  .btn-primary:hover { background: var(--teal2); }
+  .btn-outline {
+    font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.06em;
+    text-transform: uppercase; background: transparent; color: var(--teal);
+    border: 1px solid var(--teal); padding: 13px 28px; cursor: pointer;
+    text-decoration: none; display: inline-block; transition: all 0.2s; text-align: center;
+  }
+  .btn-outline:hover { background: rgba(0,210,180,0.08); }
+
+  /* FOOTER */
+  footer {
+    background: var(--bg2); border-top: 1px solid var(--border);
+    padding: 60px 5vw 30px; position: relative; z-index: 1;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem; margin-bottom: 3rem;
+  }
+  .footer-brand h2 {
+    font-family: var(--font-display); font-weight: 800; font-size: 1.4rem;
+    color: var(--teal); letter-spacing: -0.02em; margin-bottom: 0.8rem;
+  }
+  .footer-brand p { font-size: 0.85rem; line-height: 1.65; color: var(--text3); max-width: 280px; }
+  .footer-col h4 {
+    font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--teal); margin-bottom: 1.2rem;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+  .footer-col a { font-size: 0.85rem; color: var(--text3); text-decoration: none; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--teal); }
+  .footer-bottom {
+    border-top: 1px solid var(--border); padding-top: 1.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-bottom p { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.08em; color: var(--text3); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* RESPONSIVE */
+  @media (max-width: 1000px) {
+    .main-layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; border-right: none; border-bottom: 1px solid var(--border); padding: 2rem 0; max-height: none; flex-direction: row; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .sidebar-section { margin-bottom: 0; margin-right: 2rem; }
+    .pub-feed { padding-left: 0; }
+    .metrics-row { grid-template-columns: repeat(2, 1fr); }
+    .submit-cta { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 700px) {
+    .nav-links { display: none; }
+    .pub-card { grid-template-columns: 1fr; }
+    .metrics-row { grid-template-columns: 1fr 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .hero-stats-strip { flex-wrap: wrap; }
+    .hstat { min-width: 150px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html"><span>Genom</span>Atlas</a>
+  <ul class="nav-links">
+    <a href="about us.html">About us</a></li>
+    <li><a href="Research.html">Research</a></li>
+    <li><a href="Contribute">Contribute</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="index.html#community" class="nav-cta">Submit Data</a>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+
+  <div class="section-label">Research & Publications</div>
+  <h1>The Science<br>That <em>Moves</em><br>Health Forward</h1>
+  <p>Peer-reviewed publications, preprints, and working papers from GenomAtlas contributors across the US, Africa, and global institutions — advancing cancer research, Alzheimer's science, and AI-driven computational biology.</p>
+
+  <div class="hero-stats-strip">
+    <div class="hstat">
+      <span class="hstat-num">3,240</span>
+      <span class="hstat-label">Total Publications</span>
+    </div>
+    <div class="hstat">
+      <span class="hstat-num orange">1,870</span>
+      <span class="hstat-label">Cancer Research</span>
+    </div>
+    <div class="hstat">
+      <span class="hstat-num blue">640</span>
+      <span class="hstat-label">Alzheimer's / Neuro</span>
+    </div>
+    <div class="hstat">
+      <span class="hstat-num">412</span>
+      <span class="hstat-label">AI & Comp. Biology</span>
+    </div>
+    <div class="hstat">
+      <span class="hstat-num orange">318</span>
+      <span class="hstat-label">Active Preprints</span>
+    </div>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="filter-scroll">
+    <button class="fchip active" onclick="setFilter(this)">All</button>
+    <button class="fchip orange" onclick="setFilter(this)">Cancer Biology</button>
+    <button class="fchip blue" onclick="setFilter(this)">Alzheimer's & Neuro</button>
+    <button class="fchip" onclick="setFilter(this)">AI & Comp. Biology</button>
+    <button class="fchip" onclick="setFilter(this)">Epidemiology</button>
+    <button class="fchip" onclick="setFilter(this)">Genomics / GWAS</button>
+    <button class="fchip" onclick="setFilter(this)">Proteomics</button>
+    <button class="fchip" onclick="setFilter(this)">Imaging / Pathology</button>
+    <button class="fchip orange" onclick="setFilter(this)">West Africa</button>
+    <button class="fchip orange" onclick="setFilter(this)">East Africa</button>
+    <button class="fchip blue" onclick="setFilter(this)">United States</button>
+    <button class="fchip" onclick="setFilter(this)">Global / Multi-site</button>
+    <button class="fchip" onclick="setFilter(this)">Open Access</button>
+    <button class="fchip" onclick="setFilter(this)">2025</button>
+    <button class="fchip" onclick="setFilter(this)">2024</button>
+  </div>
+  <div class="search-wrap">
+    <span class="search-icon">⌕</span>
+    <input type="text" placeholder="Search papers...">
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="main-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Research Area</div>
+      <div class="sidebar-links">
+        <a class="slink active" href="#">All Areas <span class="slink-count">3,240</span></a>
+        <a class="slink" href="#">Cancer Biology <span class="slink-count">1,870</span></a>
+        <a class="slink" href="#">Alzheimer's & Neuro <span class="slink-count">640</span></a>
+        <a class="slink" href="#">AI & Comp. Biology <span class="slink-count">412</span></a>
+        <a class="slink" href="#">Epidemiology <span class="slink-count">198</span></a>
+        <a class="slink" href="#">Genomics / GWAS <span class="slink-count">310</span></a>
+        <a class="slink" href="#">Proteomics <span class="slink-count">87</span></a>
+        <a class="slink" href="#">Imaging / Pathology <span class="slink-count">134</span></a>
+      </div>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Geographic Focus</div>
+      <div class="sidebar-links">
+        <a class="slink" href="#">United States <span class="slink-count">924</span></a>
+        <a class="slink" href="#">West Africa <span class="slink-count">712</span></a>
+        <a class="slink" href="#">East Africa <span class="slink-count">488</span></a>
+        <a class="slink" href="#">Central Africa <span class="slink-count">201</span></a>
+        <a class="slink" href="#">Southern Africa <span class="slink-count">310</span></a>
+        <a class="slink" href="#">North Africa <span class="slink-count">143</span></a>
+        <a class="slink" href="#">Global / Multi-site <span class="slink-count">462</span></a>
+      </div>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Publication Type</div>
+      <div class="sidebar-links">
+        <a class="slink" href="#">Journal Articles <span class="slink-count">2,480</span></a>
+        <a class="slink" href="#">Preprints <span class="slink-count">318</span></a>
+        <a class="slink" href="#">Working Papers <span class="slink-count">214</span></a>
+        <a class="slink" href="#">Conference Papers <span class="slink-count">178</span></a>
+        <a class="slink" href="#">Reviews <span class="slink-count">50</span></a>
+      </div>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Sort By</div>
+      <select class="sort-select">
+        <option>Most Recent</option>
+        <option>Most Cited</option>
+        <option>Most Downloaded</option>
+        <option>Relevance</option>
+        <option>Oldest First</option>
+      </select>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Year</div>
+      <div class="sidebar-links">
+        <a class="slink" href="#">2025 <span class="slink-count">341</span></a>
+        <a class="slink" href="#">2024 <span class="slink-count">812</span></a>
+        <a class="slink" href="#">2023 <span class="slink-count">670</span></a>
+        <a class="slink" href="#">2022 <span class="slink-count">598</span></a>
+        <a class="slink" href="#">2021 <span class="slink-count">490</span></a>
+        <a class="slink" href="#">2019–2020 <span class="slink-count">329</span></a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- PUBLICATIONS FEED -->
+  <main class="pub-feed">
+
+    <!-- METRICS ROW -->
+    <div class="metrics-row reveal">
+      <div class="metric-box">
+        <div class="metric-val">148K</div>
+        <div class="metric-label">Total Citations</div>
+      </div>
+      <div class="metric-box orange">
+        <div class="metric-val orange">24.8K</div>
+        <div class="metric-label">Downloads / Month</div>
+      </div>
+      <div class="metric-box blue">
+        <div class="metric-val blue">62</div>
+        <div class="metric-label">Countries Represented</div>
+      </div>
+      <div class="metric-box purple">
+        <div class="metric-val purple">4.1</div>
+        <div class="metric-label">Avg. Impact Factor</div>
+      </div>
+    </div>
+
+    <div class="feed-header reveal">
+      <span>Showing 3,240 publications · sorted by most recent</span>
+      <div class="view-toggle">
+        <button class="vtbtn active" title="List view">☰</button>
+        <button class="vtbtn" title="Grid view">⊞</button>
+      </div>
+    </div>
+
+    <!-- FEATURED 1 -->
+    <div class="featured-paper reveal">
+      <div class="featured-stripe"></div>
+      <div class="pub-tags">
+        <span class="ptag">Cancer Biology</span>
+        <span class="ptag orange">West Africa</span>
+        <span class="ptag">GWAS</span>
+        <span class="ptag">Open Access</span>
+      </div>
+      <div class="pub-title">BRCA1/2 Mutation Landscape in Sub-Saharan African Women: A Pan-African Genome-Wide Association Study of 48,200 Participants</div>
+      <div class="pub-authors">Osei A., <span>Mensah K.</span>, Nwosu E., Abiola R., et al. (22 authors) · <em style="color:var(--text2);">Nature Genetics</em></div>
+      <div class="pub-abstract">Whole-genome sequencing across 14 African nations identifies 38 novel BRCA1/2 variants absent from European-derived reference panels, with allele frequencies differing significantly from non-African populations. Findings directly challenge the adequacy of current clinical risk-scoring tools when applied to African patients and call for ancestry-specific screening protocols. Population-attributable risk calculations suggest 23% of hereditary breast cancers in West Africa are currently misclassified using existing guidelines.</div>
+      <div class="pub-meta">
+        <span>📅 March 2025</span>
+        <span>🌍 14 countries</span>
+        <span>🧬 48,200 samples</span>
+        <span>📥 4,201 downloads</span>
+        <span>🔖 312 citations</span>
+      </div>
+      <div style="display:flex;gap:0.8rem;margin-top:1.5rem;">
+        <a href="#" class="btn-sm btn-sm-primary">Read Paper →</a>
+        <a href="#" class="btn-sm btn-sm-outline">Download PDF</a>
+        <a href="#" class="btn-sm btn-sm-outline">Dataset</a>
+        <a href="#" class="btn-sm btn-sm-outline">Cite</a>
+      </div>
+    </div>
+
+    <!-- FEATURED 2 -->
+    <div class="featured-paper reveal" style="margin-top:1.5px;">
+      <div class="featured-stripe orange"></div>
+      <div class="pub-tags">
+        <span class="ptag orange">Alzheimer's & Neuro</span>
+        <span class="ptag blue">United States</span>
+        <span class="ptag orange">West Africa</span>
+        <span class="ptag">AI / ML</span>
+      </div>
+      <div class="pub-title">Cross-Ancestry Alzheimer's Risk Prediction Using Multi-Modal Machine Learning: ApoE4 Stratification Across 12,000 Diverse Patients</div>
+      <div class="pub-authors">Chen R., <span>Dlamini N.</span>, Okafor J., Williams T., et al. · <em style="color:var(--text2);">Cell</em></div>
+      <div class="pub-abstract">A transformer-based multi-modal model integrating genetic variants, clinical biomarkers, and neuroimaging achieves 84.3% AUC for Alzheimer's onset prediction across ethnically diverse cohorts — outperforming single-ancestry baseline models by 11.2 percentage points. The model demonstrates particular improvement in African-American and Ghanaian participants, subgroups historically underperformed by existing clinical tools. Code and model weights are fully open-sourced.</div>
+      <div class="pub-meta">
+        <span>📅 January 2025</span>
+        <span>🌍 US · Ghana</span>
+        <span>🧠 12,000 patients</span>
+        <span>📥 3,880 downloads</span>
+        <span>🔖 198 citations</span>
+      </div>
+      <div style="display:flex;gap:0.8rem;margin-top:1.5rem;">
+        <a href="#" class="btn-sm btn-sm-primary">Read Paper →</a>
+        <a href="#" class="btn-sm btn-sm-outline">Download PDF</a>
+        <a href="#" class="btn-sm btn-sm-outline">Model Weights</a>
+        <a href="#" class="btn-sm btn-sm-outline">Cite</a>
+      </div>
+    </div>
+
+    <!-- SECTION DIVIDER: Recent Papers -->
+    <div class="section-divider reveal">
+      <h3>Recent Publications</h3>
+      <div class="section-divider-line"></div>
+      <div class="section-divider-tag">2024 – 2025</div>
+    </div>
+
+    <!-- PUB CARD 1 -->
+    <div class="pub-card reveal">
+      <div>
+        <div class="pub-tags">
+          <span class="ptag">AI & Comp. Biology</span>
+          <span class="ptag orange">East Africa</span>
+          <span class="ptag">Imaging</span>
+        </div>
+        <div class="pub-title">Lightweight CNN for Cervical Cancer Pathology Screening in Rural East African Clinics</div>
+        <div class="pub-authors">Mensah K., <span>Wambua J.</span>, Nkosi L. · <em style="color:var(--text2);">The Lancet Digital Health</em></div>
+        <div class="pub-abstract">Mobile-deployable convolutional neural network achieves 91% sensitivity on cervical cytology images from low-bandwidth rural settings, operating on 2W of compute power. Validated across 6 clinics in Kenya and Rwanda with 18,000 whole-slide images.</div>
+        <div class="pub-meta">
+          <span>📅 Nov 2024</span>
+          <span>🌍 Kenya · Rwanda</span>
+          <span>🔬 18,000 slides</span>
+          <span>🔖 88 citations</span>
+        </div>
+      </div>
+      <div class="pub-actions">
+        <a href="#" class="btn-sm btn-sm-primary">Read →</a>
+        <a href="#" class="btn-sm btn-sm-outline">PDF</a>
+        <a href="#" class="btn-sm btn-sm-outline">Code</a>
+        <div class="cite-count"><span class="cite-num">88</span>Citations</div>
+      </div>
+    </div>
+
+    <!-- PUB CARD 2 -->
+    <div class="pub-card orange reveal">
+      <div>
+        <div class="pub-tags">
+          <span class="ptag orange">Cancer Biology</span>
+          <span class="ptag orange">West Africa</span>
+          <span class="ptag">Epidemiology</span>
+        </div>
+        <div class="pub-title">Hepatocellular Carcinoma and Hepatitis B Co-morbidity in Sub-Saharan Africa: 20-Year Longitudinal Analysis</div>
+        <div class="pub-authors">Nwosu E., <span>Abiola R.</span>, Mensah K., et al. · <em style="color:var(--text2);">Journal of Hepatology</em></div>
+        <div class="pub-abstract">Epidemiological modeling using 31,400 records from 8 African nations identifies critical 18-month intervention windows for HCC prophylaxis in HBV-positive patients. Age-of-exposure and viral load interaction effects are quantified for the first time in an African population at this scale.</div>
+        <div class="pub-meta">
+          <span>📅 Sep 2024</span>
+          <span>🌍 8 African nations</span>
+          <span>📋 31,400 records</span>
+          <span>🔖 142 citations</span>
+        </div>
+      </div>
+      <div class="pub-actions">
+        <a href="#" class="btn-sm btn-sm-primary">Read →</a>
+        <a href="#" class="btn-sm btn-sm-outline">PDF</a>
+        <a href="#" class="btn-sm btn-sm-outline">Dataset</a>
+        <div class="cite-count"><span class="cite-num" style="color:var(--orange);">142</span>Citations</div>
+      </div>
+    </div>
+
+    <!-- PUB CARD 3 -->
+    <div class="pub-card blue reveal">
+      <div>
+        <div class="pub-tags">
+          <span class="ptag orange">Alzheimer's & Neuro</span>
+          <span class="ptag blue">United States</span>
+          <span class="ptag purple">Proteomics</span>
+        </div>
+        <div class="pub-title">Divergent Tau Phosphorylation Signatures in African-American Alzheimer's Patients: A Mass-Spectrometry Proteomics Study</div>
+        <div class="pub-authors">Chen R., <span>Williams T.</span>, Osei A. · <em style="color:var(--text2);">Alzheimer's & Dementia</em></div>
+        <div class="pub-abstract">Mass-spectrometry proteomics of 820 post-mortem brain biopsies reveals statistically significant differences in tau phosphorylation at Ser202 and Thr205 residues in African-American patients vs. European-American controls — challenging the universality of existing AD biomarker panels.</div>
+        <div class="pub-meta">
+          <span>📅 Aug 2024</span>
+          <span>🌍 United States</span>
+          <span>🧠 820 biopsies</span>
+          <span>🔖 61 citations</span>
+        </div>
+      </div>
+      <div class="pub-actions">
+        <a href="#" class="btn-sm btn-sm-primary">Read →</a>
+        <a href="#" class="btn-sm btn-sm-outline">PDF</a>
+        <a href="#" class="btn-sm btn-sm-outline">Data</a>
+        <div class="cite-count"><span class="cite-num" style="color:#6b9fff;">61</span>Citations</div>
+      </div>
+    </div>
+
+    <!-- PUB CARD 4 -->
+    <div class="pub-card reveal">
+      <div>
+        <div class="pub-tags">
+          <span class="ptag">AI & Comp. Biology</span>
+          <span class="ptag orange">Pan-Africa</span>
+          <span class="ptag">Federated Learning</span>
+        </div>
+        <div class="pub-title">FedHealth: Privacy-Preserving Federated Learning for Cancer Prediction Across 14 African Hospitals Without Raw Data Sharing</div>
+        <div class="pub-authors">Dlamini N., <span>Mensah K.</span>, Okafor J., et al. · <em style="color:var(--text2);">Nature Medicine</em></div>
+        <div class="pub-abstract">A federated learning framework enables 14 hospitals across 8 African countries to collaboratively train a cancer risk model without centralizing patient data. The federated model achieves 88.7% accuracy — within 2.3% of a hypothetical centralized model — while maintaining full data sovereignty at each site.</div>
+        <div class="pub-meta">
+          <span>📅 Jun 2024</span>
+          <span>🌍 Pan-Africa</span>
+          <span>🏥 14 hospital sites</span>
+          <span>🔖 224 citations</span>
+        </div>
+      </div>
+      <div class="pub-actions">
+        <a href="#" class="btn-sm btn-sm-primary">Read →</a>
+        <a href="#" class="btn-sm btn-sm-outline">PDF</a>
+        <a href="#" class="btn-sm btn-sm-outline">Code</a>
+        <div class="cite-count"><span class="cite-num">224</span>Citations</div>
+      </div>
+    </div>
+
+    <!-- SECTION DIVIDER: Preprints -->
+    <div class="section-divider reveal">
+      <h3>Preprints & Working Papers</h3>
+      <div class="section-divider-line"></div>
+      <div class="section-divider-tag">Awaiting peer review</div>
+    </div>
+
+    <div class="preprint-card reveal">
+      <span class="preprint-badge">Preprint</span>
+      <div class="preprint-body">
+        <h4>Colorectal Cancer Microbiome Signatures in West African Patients: A 16S rRNA Sequencing Study</h4>
+        <p>Preliminary findings from 3,100 stool samples identify distinct microbiome dysbiosis patterns in CRC patients from Nigeria, Ghana, and Senegal — patterns not observed in published European or American CRC microbiome studies, suggesting geography-specific microbial risk factors.</p>
+        <div class="pub-meta">
+          <span>📅 Posted Feb 2025</span>
+          <span>🌍 West Africa</span>
+          <span>🧬 3,100 samples</span>
+          <span>bioRxiv</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="preprint-card reveal">
+      <span class="preprint-badge">Preprint</span>
+      <div class="preprint-body">
+        <h4>ProteoMap v2: Automated Tau and Amyloid-β Quantification Pipeline with AI-Assisted Annotation</h4>
+        <p>An updated proteomics pipeline for Alzheimer's biomarker quantification reduces manual annotation time by 78% with AI-assisted classification. Validated on 3 independent cohorts including a newly assembled African-American postmortem brain bank (n=440).</p>
+        <div class="pub-meta">
+          <span>📅 Posted Jan 2025</span>
+          <span>🌍 United States</span>
+          <span>🧠 1,200 samples</span>
+          <span>medRxiv</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="preprint-card reveal">
+      <span class="preprint-badge">Working Paper</span>
+      <div class="preprint-body">
+        <h4>Equity-Aware GWAS: Detecting and Correcting Ancestry Bias in Genome-Wide Association Studies</h4>
+        <p>Methodological framework for identifying and correcting ancestry-based confounding in multi-ethnic GWAS datasets. Simulation studies and application to the Pan-African Breast Cancer GWAS demonstrate 31% reduction in false-positive rate for underrepresented ancestries.</p>
+        <div class="pub-meta">
+          <span>📅 Posted Dec 2024</span>
+          <span>🌍 Global</span>
+          <span>🔬 Methodological</span>
+          <span>GenomAtlas Working Papers</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="preprint-card reveal">
+      <span class="preprint-badge">Preprint</span>
+      <div class="preprint-body">
+        <h4>Lung Cancer CT Screening in Ethiopian Urban Populations: Prevalence, Staging, and Diagnostic Delay</h4>
+        <p>First large-scale CT lung cancer screening study in Ethiopia (n=2,400) reports 3.1% screening-detected cancer prevalence with median stage at diagnosis of IIIA — substantially later than reported in comparable US screening trials — highlighting systemic diagnostic access barriers.</p>
+        <div class="pub-meta">
+          <span>📅 Posted Mar 2025</span>
+          <span>🌍 Ethiopia</span>
+          <span>🫁 2,400 scans</span>
+          <span>medRxiv</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="pagination reveal">
+      <span class="page-info">Page 1 of 218 · 3,240 total</span>
+      <div class="page-btns">
+        <button class="page-btn">←</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">…</button>
+        <button class="page-btn">218</button>
+        <button class="page-btn">→</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- SUBMIT CTA -->
+<div class="submit-cta">
+  <div>
+    <div class="section-label" style="opacity:1; animation:none;">Submit Your Research</div>
+    <h2>Have Research to<br><em>Share With the World?</em></h2>
+    <p>Submit your paper, dataset, or preprint to GenomAtlas. All submissions receive structured peer feedback within 14 days. We especially welcome contributions from African and underrepresented research communities.</p>
+  </div>
+  <div class="cta-btns">
+    <a href="index.html#community" class="btn-primary">Submit a Publication →</a>
+    <a href="index.html#community" class="btn-outline">Upload a Dataset</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <h2>GenomAtlas</h2>
+      <p>An open scientific platform for global public health research, with a focus on cancer, Alzheimer's disease, and AI-driven computational biology for the US, Africa, and the world.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <ul>
+        <li><a href="index.html#database">Database</a></li>
+        <li><a href="index.html#ai">AI Tools</a></li>
+        <li><a href="#">API Access</a></li>
+        <li><a href="index.html#community">Submit Data</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Research</h4>
+      <ul>
+        <li><a href="research.html">Publications</a></li>
+        <li><a href="research.html">Preprints</a></li>
+        <li><a href="research.html">Working Papers</a></li>
+        <li><a href="#">Most Cited</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>About</h4>
+      <ul>
+        <li><a href="about.html">Mission</a></li>
+        <li><a href="about.html">Team</a></li>
+        <li><a href="about.html">Ethics Policy</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 GenomAtlas — Global Health Research Repository</p>
+    <p>Built for science. Built for equity.</p>
+  </div>
+</footer>
+
+<script>
+  // Filter chip toggle
+  function setFilter(el) {
+    document.querySelectorAll('.fchip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // Sidebar link toggle
+  document.querySelectorAll('.slink').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelectorAll('.slink').forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    });
+  });
+
+  // View toggle
+  document.querySelectorAll('.vtbtn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.vtbtn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), 60);
+      }
+    });
+  }, { threshold: 0.06 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Pagination buttons
+  document.querySelectorAll('.page-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.page-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
