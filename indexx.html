@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GenomAtlas — Global Health Research Repository</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050a0f;
+    --bg2: #080e16;
+    --bg3: #0c1520;
+    --surface: #0f1d2b;
+    --surface2: #142436;
+    --border: rgba(0,210,180,0.12);
+    --border2: rgba(0,210,180,0.25);
+    --teal: #00d2b4;
+    --teal2: #00f5d4;
+    --blue: #1a6bff;
+    --orange: #ff6b35;
+    --text: #e8f4f2;
+    --text2: #8ab5b0;
+    --text3: #4a7a75;
+    --font-display: 'Syne', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+    --font-body: 'IBM Plex Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* GRID NOISE BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,210,180,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,210,180,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5vw;
+    height: 68px;
+    background: rgba(5,10,15,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+    color: var(--teal);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--text); }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text2);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--teal); }
+
+  .nav-cta {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--teal);
+    border: none;
+    padding: 9px 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-decoration: none;
+  }
+
+  .nav-cta:hover { background: var(--teal2); }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 120px 5vw 80px;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,210,180,0.08) 0%, transparent 70%);
+    top: -100px;
+    right: -100px;
+    pointer-events: none;
+  }
+
+  .hero-glow2 {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(26,107,255,0.06) 0%, transparent 70%);
+    bottom: 0;
+    left: 20%;
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.1s forwards;
+  }
+
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--teal);
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    max-width: 800px;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.2s forwards;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--teal);
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text2);
+    max-width: 560px;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.35s forwards;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.5s forwards;
+  }
+
+  .btn-primary {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--teal);
+    color: var(--bg);
+    border: none;
+    padding: 14px 32px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+    font-weight: 700;
+  }
+
+  .btn-primary:hover { background: var(--teal2); transform: translateY(-2px); }
+
+  .btn-outline {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--teal);
+    border: 1px solid var(--teal);
+    padding: 14px 32px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+  }
+
+  .btn-outline:hover { background: rgba(0,210,180,0.08); transform: translateY(-2px); }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--border);
+    opacity: 0;
+    animation: fadeUp 0.7s 0.65s forwards;
+  }
+
+  .stat-item { display: flex; flex-direction: column; gap: 4px; }
+
+  .stat-num {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 2rem;
+    color: var(--teal);
+    letter-spacing: -0.03em;
+  }
+
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+  }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+    padding: 14px 0;
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: 4rem;
+    animation: marquee 25s linear infinite;
+    white-space: nowrap;
+  }
+
+  .marquee-track span {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text3);
+    flex-shrink: 0;
+  }
+
+  .marquee-track span b { color: var(--teal); font-weight: 400; }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* SECTIONS SHARED */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 5vw;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--teal);
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-desc {
+    color: var(--text2);
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 520px;
+    margin-bottom: 3.5rem;
+  }
+
+  /* RESEARCH SECTION */
+  #research { background: var(--bg2); }
+
+  .research-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5px;
+    background: var(--border);
+  }
+
+  .research-card {
+    background: var(--surface);
+    padding: 2.5rem;
+    transition: background 0.3s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .research-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 2px;
+    width: 0;
+    background: var(--teal);
+    transition: width 0.4s;
+  }
+
+  .research-card:hover { background: var(--surface2); }
+  .research-card:hover::after { width: 100%; }
+
+  .card-tag {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 1rem;
+    padding: 4px 10px;
+    border: 1px solid rgba(0,210,180,0.3);
+    display: inline-block;
+  }
+
+  .card-tag.orange { color: var(--orange); border-color: rgba(255,107,53,0.3); }
+  .card-tag.blue { color: #6b9fff; border-color: rgba(107,159,255,0.3); }
+
+  .research-card h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.8rem;
+    line-height: 1.3;
+  }
+
+  .research-card p {
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--text2);
+    margin-bottom: 1.5rem;
+  }
+
+  .card-meta {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    color: var(--text3);
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  /* DATABASE SECTION */
+  #database { background: var(--bg); }
+
+  .db-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .db-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .filter-btn {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border: 1px solid var(--border2);
+    background: transparent;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--teal);
+    color: var(--bg);
+    border-color: var(--teal);
+  }
+
+  .db-table {
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .db-table-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    padding: 12px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    gap: 1rem;
+  }
+
+  .db-table-header span {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal);
+  }
+
+  .db-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    gap: 1rem;
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+
+  .db-row:hover { background: var(--surface); }
+  .db-row:last-child { border-bottom: none; }
+
+  .db-row span {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text2);
+    letter-spacing: 0.02em;
+    align-self: center;
+  }
+
+  .db-row span:first-child { color: var(--text); font-size: 0.78rem; }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+  }
+
+  .badge-us { background: rgba(26,107,255,0.15); color: #6b9fff; }
+  .badge-af { background: rgba(255,107,53,0.15); color: var(--orange); }
+  .badge-gl { background: rgba(0,210,180,0.15); color: var(--teal); }
+
+  .db-vis {
+    position: sticky;
+    top: 100px;
+  }
+
+  .vis-panel {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 2rem;
+    margin-bottom: 1.5px;
+  }
+
+  .vis-title {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 1.5rem;
+  }
+
+  .world-map {
+    width: 100%;
+    height: 180px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .map-dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--teal);
+    box-shadow: 0 0 12px var(--teal);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.5); }
+  }
+
+  .map-dot.orange { background: var(--orange); box-shadow: 0 0 12px var(--orange); animation-delay: 0.5s; }
+  .map-dot.blue { background: #6b9fff; box-shadow: 0 0 12px #6b9fff; animation-delay: 1s; }
+
+  .bar-chart { margin-top: 1rem; }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .bar-label {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+    color: var(--text2);
+    width: 80px;
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: var(--teal);
+    animation: barGrow 1.5s ease forwards;
+    transform-origin: left;
+  }
+
+  .bar-fill.orange { background: var(--orange); }
+  .bar-fill.blue { background: #6b9fff; }
+
+  @keyframes barGrow {
+    from { width: 0; }
+  }
+
+  .bar-val {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    color: var(--text3);
+    width: 32px;
+    text-align: right;
+  }
+
+  /* AI SECTION */
+  #ai { background: var(--bg2); }
+
+  .ai-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+    background: var(--border);
+    margin-bottom: 1.5px;
+  }
+
+  .ai-card {
+    background: var(--bg);
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--teal), transparent);
+  }
+
+  .ai-card.orange::before { background: linear-gradient(90deg, var(--orange), transparent); }
+  .ai-card.blue::before { background: linear-gradient(90deg, #6b9fff, transparent); }
+
+  .ai-icon {
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--border2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+  }
+
+  .ai-card h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.8rem;
+  }
+
+  .ai-card p {
+    font-size: 0.85rem;
+    line-height: 1.65;
+    color: var(--text2);
+    margin-bottom: 1.5rem;
+  }
+
+  .ai-link {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: gap 0.2s;
+  }
+
+  .ai-link:hover { gap: 14px; }
+
+  .ai-terminal {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    line-height: 1.8;
+    color: var(--text2);
+  }
+
+  .t-line { display: flex; gap: 12px; margin-bottom: 4px; }
+  .t-prompt { color: var(--teal); }
+  .t-cmd { color: var(--text); }
+  .t-out { color: var(--text3); padding-left: 20px; }
+  .t-highlight { color: var(--teal); }
+  .t-cursor {
+    display: inline-block;
+    width: 8px;
+    height: 14px;
+    background: var(--teal);
+    animation: blink 1s step-end infinite;
+    vertical-align: middle;
+  }
+
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* COMMUNITY SECTION */
+  #community { background: var(--bg); }
+
+  .community-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+
+  .submit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+  .form-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+  }
+
+  .form-input, .form-select, .form-textarea {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 16px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 300;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--teal);
+  }
+
+  .form-textarea { resize: vertical; min-height: 100px; }
+
+  .form-select option { background: var(--surface); }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .upload-zone {
+    border: 1px dashed var(--border2);
+    background: var(--surface);
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .upload-zone:hover {
+    border-color: var(--teal);
+    background: rgba(0,210,180,0.03);
+  }
+
+  .upload-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .upload-text { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.08em; color: var(--text3); }
+  .upload-text span { color: var(--teal); }
+
+  .community-info { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  .info-card {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 1.8rem;
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+    transition: border-color 0.3s;
+  }
+
+  .info-card:hover { border-color: var(--border2); }
+
+  .info-icon {
+    width: 36px;
+    height: 36px;
+    background: rgba(0,210,180,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .info-icon.orange { background: rgba(255,107,53,0.1); }
+
+  .info-body h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .info-body p {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--text2);
+  }
+
+  /* FOCUS AREAS */
+  .focus-strip {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 5vw;
+  }
+
+  .focus-inner {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5px;
+    background: var(--border);
+  }
+
+  .focus-item {
+    background: var(--bg2);
+    padding: 2rem;
+    text-align: center;
+    transition: background 0.3s;
+  }
+
+  .focus-item:hover { background: var(--surface); }
+
+  .focus-num {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 2.5rem;
+    color: var(--teal);
+    letter-spacing: -0.05em;
+    margin-bottom: 0.3rem;
+  }
+
+  .focus-item p {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 60px 5vw 30px;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .footer-brand h2 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: var(--teal);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.8rem;
+  }
+
+  .footer-brand p {
+    font-size: 0.85rem;
+    line-height: 1.65;
+    color: var(--text3);
+    max-width: 280px;
+  }
+
+  .footer-col h4 {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 1.2rem;
+  }
+
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+
+  .footer-col a {
+    font-size: 0.85rem;
+    color: var(--text3);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-col a:hover { color: var(--teal); }
+
+  .footer-bottom {
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-bottom p {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    color: var(--text3);
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .db-layout, .community-grid { grid-template-columns: 1fr; }
+    .ai-grid { grid-template-columns: 1fr; }
+    .focus-inner { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .hero-stats { gap: 2rem; flex-wrap: wrap; }
+    .db-table-header, .db-row { grid-template-columns: 2fr 1fr 1fr; }
+    .db-table-header span:last-child, .db-row span:last-child { display: none; }
+  }
+
+  @media (max-width: 600px) {
+    .focus-inner { grid-template-columns: 1fr 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#"><span>Genom</span>Atlas</a>
+  <ul class="nav-links">
+    <li><a href="/about-us.html">About us</a></li>
+    <li><a href="/research.html">Research</a></li>
+    <li><a href="/Contribute">Contribute</a></li>
+    <li><a href="/contact.html">Contact</a></li>
+  </ul>
+  <a href="#community" class="nav-cta">Submit Data</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+
+  <div class="hero-tag">Global Public Health Repository</div>
+
+  <h1>
+    Advancing Health<br>
+    Research for<br>
+    <em>Everyone.</em>
+  </h1>
+
+  <p class="hero-sub">
+    A unified scientific platform and open database for cancer research, Alzheimer's disease, and computational biology — with a focus on the US, Africa, and globally underrepresented populations.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#database" class="btn-primary">Explore the Database →</a>
+    <a href="#research" class="btn-outline">Browse Research</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <span class="stat-num">14,800+</span>
+      <span class="stat-label">Datasets Indexed</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">62</span>
+      <span class="stat-label">Countries Covered</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">3,200+</span>
+      <span class="stat-num" style="font-size:2rem">Publications</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">940</span>
+      <span class="stat-label">Active Contributors</span>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span><b>Cancer Genomics</b> — Sub-Saharan Africa</span>
+    <span><b>Alzheimer's Biomarkers</b> — US Population Study</span>
+    <span><b>AI Diagnostic Models</b> — Open Source</span>
+    <span><b>Malaria Co-morbidity</b> — West Africa</span>
+    <span><b>GWAS Data</b> — Pan-African Cohort</span>
+    <span><b>Computational Proteomics</b> — Multi-site</span>
+    <span><b>Neuro-Imaging Database</b> — US & Nigeria</span>
+    <span><b>Cancer Genomics</b> — Sub-Saharan Africa</span>
+    <span><b>Alzheimer's Biomarkers</b> — US Population Study</span>
+    <span><b>AI Diagnostic Models</b> — Open Source</span>
+    <span><b>Malaria Co-morbidity</b> — West Africa</span>
+    <span><b>GWAS Data</b> — Pan-African Cohort</span>
+    <span><b>Computational Proteomics</b> — Multi-site</span>
+    <span><b>Neuro-Imaging Database</b> — US & Nigeria</span>
+  </div>
+</div>
+
+<!-- FOCUS STRIP -->
+<div class="focus-strip">
+  <div class="focus-inner">
+    <div class="focus-item reveal">
+      <div class="focus-num">US</div>
+      <p>United States<br>research cohorts</p>
+    </div>
+    <div class="focus-item reveal">
+      <div class="focus-num">46+</div>
+      <p>African nations<br>represented</p>
+    </div>
+    <div class="focus-item reveal">
+      <div class="focus-num">AI</div>
+      <p>Computational<br>biology tools</p>
+    </div>
+    <div class="focus-item reveal">
+      <div class="focus-num">Open</div>
+      <p>Peer-reviewed &<br>open-access data</p>
+    </div>
+  </div>
+</div>
+
+<!-- RESEARCH SECTION -->
+<section id="research">
+  <div class="section-label">Research & Publications</div>
+  <h2 class="section-title">Latest Scientific<br>Contributions</h2>
+  <p class="section-desc">Peer-reviewed publications, preprints, and research briefs from contributors across the US, Africa, and global institutions.</p>
+
+  <div class="research-grid reveal">
+    <div class="research-card">
+      <span class="card-tag">Cancer Biology</span>
+      <h3>BRCA Mutation Prevalence in Nigerian Women: A Population-Scale GWAS</h3>
+      <p>Whole-genome sequencing of 4,200 participants reveals novel variants in BRCA1/2 loci not captured in Eurocentric datasets, with implications for pan-African screening protocols.</p>
+      <div class="card-meta">
+        <span>Lagos · 2024</span>
+        <span>4,200 samples</span>
+        <span>Open Access</span>
+      </div>
+    </div>
+
+    <div class="research-card">
+      <span class="card-tag orange">Alzheimer's Disease</span>
+      <h3>ApoE4 Risk Stratification Across Diverse Ancestries Using Machine Learning</h3>
+      <p>Multivariate ML model trained on multi-ethnic cohorts predicts Alzheimer's onset with 84.3% AUC — outperforming single-ancestry baseline models by 11 points.</p>
+      <div class="card-meta">
+        <span>US · Ghana · 2024</span>
+        <span>12,000 patients</span>
+        <span>Open Access</span>
+      </div>
+    </div>
+
+    <div class="research-card">
+      <span class="card-tag blue">Computational Biology</span>
+      <h3>Deep Learning-Assisted Pathology Screening for Cervical Cancer in Low-Resource Settings</h3>
+      <p>A mobile-deployable CNN achieves 91% sensitivity on cervical cytology images from rural East African clinics, using only 2W of compute power.</p>
+      <div class="card-meta">
+        <span>Kenya · Rwanda · 2025</span>
+        <span>18,000 slides</span>
+        <span>Open Source</span>
+      </div>
+    </div>
+
+    <div class="research-card">
+      <span class="card-tag">Cancer Biology</span>
+      <h3>Hepatocellular Carcinoma Co-morbidity with HBV in Sub-Saharan Africa</h3>
+      <p>Epidemiological modeling of HCC-HBV co-morbidity using 20-year longitudinal data from 8 African nations. Identifies critical windows for prophylactic intervention.</p>
+      <div class="card-meta">
+        <span>8 Countries · 2023</span>
+        <span>31,400 records</span>
+        <span>Open Access</span>
+      </div>
+    </div>
+
+    <div class="research-card">
+      <span class="card-tag orange">Alzheimer's Disease</span>
+      <h3>Tau Protein Aggregation Patterns in African-American Patients: A Proteomics Study</h3>
+      <p>Mass-spectrometry proteomics reveals divergent tau phosphorylation patterns in African-American AD patients, challenging current biomarker standards.</p>
+      <div class="card-meta">
+        <span>US · 2024</span>
+        <span>820 biopsies</span>
+        <span>Open Access</span>
+      </div>
+    </div>
+
+    <div class="research-card">
+      <span class="card-tag blue">AI in Health</span>
+      <h3>Federated Learning for Cancer Prediction Without Data Sharing Across African Hospitals</h3>
+      <p>Privacy-preserving FL framework enables 14 hospitals to collaboratively train a cancer risk model without centralizing patient data — achieving 88.7% accuracy.</p>
+      <div class="card-meta">
+        <span>Pan-Africa · 2025</span>
+        <span>14 sites</span>
+        <span>Open Source</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:2rem; text-align:center;">
+    <a href="#" class="btn-outline">View All Publications →</a>
+  </div>
+</section>
+
+<!-- DATABASE SECTION -->
+<section id="database">
+  <div class="section-label">Data Repository</div>
+  <h2 class="section-title">Explore the Global<br>Health Database</h2>
+  <p class="section-desc">Browse, filter, and download curated datasets covering cancer, neurological disease, genomics, and clinical records.</p>
+
+  <div class="db-layout reveal">
+    <div>
+      <div class="db-filters">
+        <button class="filter-btn active">All Regions</button>
+        <button class="filter-btn">US</button>
+        <button class="filter-btn">West Africa</button>
+        <button class="filter-btn">East Africa</button>
+        <button class="filter-btn">Southern Africa</button>
+        <button class="filter-btn">Global</button>
+      </div>
+
+      <div style="display:flex;gap:0.5rem;margin-bottom:1.5rem;">
+        <input type="text" class="form-input" placeholder="Search datasets..." style="flex:1;">
+        <button class="btn-primary" style="white-space:nowrap;padding:12px 20px;font-size:0.72rem;">Search</button>
+      </div>
+
+      <div class="db-table">
+        <div class="db-table-header">
+          <span>Dataset Name</span>
+          <span>Region</span>
+          <span>Type</span>
+          <span>Records</span>
+        </div>
+        <div class="db-row">
+          <span>Pan-African Breast Cancer GWAS</span>
+          <span><span class="badge badge-af">Africa</span></span>
+          <span><span style="font-size:0.65rem;color:var(--text3);">Genomics</span></span>
+          <span>48,200</span>
+        </div>
+        <div class="db-row">
+          <span>US Alzheimer's Longitudinal Study</span>
+          <span><span class="badge badge-us">US</span></span>
+          <span><span style="font-size:0.65rem;color:var(--text3);">Clinical</span></span>
+          <span>12,400</span>
+        </div>
+        <div class="db-row">
+          <span>HCC-HBV Co-morbidity Registry</span>
+          <span><span class="badge badge-af">Africa</span></span>
+          <span><span style="font-size:0.65rem;color:var(--text3);">Epidemiology</span></span>
+          <span>31,400</span>
+        </div>
+        <div class="db-row">
+          <span>Cervical Cancer Slide Archive</span>
+          <span><span class="badge badge-af">Africa</span></span>
+          <span><span style="font-size:0.65rem;color:var(--text3);">Imaging</span></span>
+          <span>18,000</span>
+        </div>
+        <div class="db-row">
+          <span>Multi-Ethnic ApoE4 Cohort</span>
+          <span><span class="badge badge-gl">Global</span></span>
+          <span><span style="font-size:0.65rem;color:var(--text3);">Clinical</span></span>
+          <span>9,800</span>
+        </div>
+        <div class="db-row">
+          <span>Tau Proteomics — African American</span>
+          <span><span class="badge badge-us">US</span></span>
+          <span><span style="font-size:0.65rem;color:var(--text3);">Proteomics</span></span>
+          <span>820</span>
+        </div>
+        <div class="db-row">
+          <span>West Africa Colorectal Cancer Registry</span>
+          <span><span class="badge badge-af">Africa</span></span>
+          <span><span style="font-size:0.65rem;color:var(--text3);">Epidemiology</span></span>
+          <span>6,700</span>
+        </div>
+        <div class="db-row">
+          <span>Federated Learning Hospital Network</span>
+          <span><span class="badge badge-gl">Global</span></span>
+          <span><span style="font-size:0.65rem;color:var(--text3);">AI/ML</span></span>
+          <span>14 sites</span>
+        </div>
+      </div>
+
+      <div style="margin-top:1rem; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-family:var(--font-mono);font-size:0.62rem;color:var(--text3);">Showing 8 of 14,800 datasets</span>
+        <div style="display:flex;gap:0.5rem;">
+          <button class="filter-btn">← Prev</button>
+          <button class="filter-btn active">1</button>
+          <button class="filter-btn">2</button>
+          <button class="filter-btn">3</button>
+          <button class="filter-btn">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="db-vis">
+      <div class="vis-panel">
+        <div class="vis-title">Geographic Coverage</div>
+        <div class="world-map">
+          <!-- US dots -->
+          <div class="map-dot blue" style="left:18%;top:35%;"></div>
+          <div class="map-dot blue" style="left:22%;top:42%;"></div>
+          <!-- Africa dots -->
+          <div class="map-dot orange" style="left:48%;top:52%;"></div>
+          <div class="map-dot orange" style="left:51%;top:58%;"></div>
+          <div class="map-dot orange" style="left:54%;top:48%;"></div>
+          <div class="map-dot orange" style="left:46%;top:45%;"></div>
+          <!-- Europe/Asia -->
+          <div class="map-dot" style="left:50%;top:30%;"></div>
+          <div class="map-dot" style="left:72%;top:38%;"></div>
+          <svg width="100%" height="100%" style="position:absolute;inset:0;opacity:0.15">
+            <ellipse cx="50%" cy="50%" rx="42%" ry="48%" fill="none" stroke="var(--teal)" stroke-width="0.5"/>
+            <ellipse cx="50%" cy="50%" rx="35%" ry="30%" fill="none" stroke="var(--teal)" stroke-width="0.3"/>
+            <line x1="0" y1="50%" x2="100%" y2="50%" stroke="var(--teal)" stroke-width="0.3"/>
+            <line x1="50%" y1="0" x2="50%" y2="100%" stroke="var(--teal)" stroke-width="0.3"/>
+          </svg>
+        </div>
+        <div style="display:flex;gap:1.5rem;margin-top:1rem;font-family:var(--font-mono);font-size:0.6rem;">
+          <span style="display:flex;align-items:center;gap:6px;color:var(--text3);"><span style="width:8px;height:8px;background:#6b9fff;border-radius:50%;display:inline-block;"></span>US</span>
+          <span style="display:flex;align-items:center;gap:6px;color:var(--text3);"><span style="width:8px;height:8px;background:var(--orange);border-radius:50%;display:inline-block;"></span>Africa</span>
+          <span style="display:flex;align-items:center;gap:6px;color:var(--text3);"><span style="width:8px;height:8px;background:var(--teal);border-radius:50%;display:inline-block;"></span>Global</span>
+        </div>
+      </div>
+
+      <div class="vis-panel">
+        <div class="vis-title">Data by Disease Area</div>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <span class="bar-label">Cancer</span>
+            <div class="bar-track"><div class="bar-fill" style="width:74%"></div></div>
+            <span class="bar-val">74%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Alzheimer's</span>
+            <div class="bar-track"><div class="bar-fill orange" style="width:18%"></div></div>
+            <span class="bar-val">18%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Other</span>
+            <div class="bar-track"><div class="bar-fill blue" style="width:8%"></div></div>
+            <span class="bar-val">8%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="vis-panel">
+        <div class="vis-title">Data by Region</div>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <span class="bar-label">Africa</span>
+            <div class="bar-track"><div class="bar-fill orange" style="width:58%"></div></div>
+            <span class="bar-val">58%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">US</span>
+            <div class="bar-track"><div class="bar-fill blue" style="width:29%"></div></div>
+            <span class="bar-val">29%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Global</span>
+            <div class="bar-track"><div class="bar-fill" style="width:13%"></div></div>
+            <span class="bar-val">13%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI & COMPBIO SECTION -->
+<section id="ai">
+  <div class="section-label">AI & Computational Biology</div>
+  <h2 class="section-title">Tools, Models &<br>Pipelines</h2>
+  <p class="section-desc">Open-source AI and bioinformatics resources for cancer detection, neurodegeneration modeling, and genomic analysis.</p>
+
+  <div class="ai-grid reveal">
+    <div class="ai-card">
+      <div class="ai-icon">🧬</div>
+      <h3>CancerSeq AI</h3>
+      <p>Deep learning pipeline for somatic variant calling from whole-genome sequencing data. Optimized for African ancestry genomes with pan-ethnic training data.</p>
+      <a href="#" class="ai-link">Access Tool →</a>
+    </div>
+    <div class="ai-card orange">
+      <div class="ai-icon">🧠</div>
+      <h3>NeuroRisk Engine</h3>
+      <p>Multi-modal Alzheimer's risk prediction combining genetic variants, clinical markers, and neuroimaging. Validated on diverse US and African cohorts.</p>
+      <a href="#" class="ai-link" style="color:var(--orange)">Access Tool →</a>
+    </div>
+    <div class="ai-card blue">
+      <div class="ai-icon">🔬</div>
+      <h3>PathVision</h3>
+      <p>Lightweight CNN for histopathology slide analysis. Deployable on low-bandwidth, low-compute devices — built for clinical use in resource-limited settings.</p>
+      <a href="#" class="ai-link" style="color:#6b9fff">Access Tool →</a>
+    </div>
+    <div class="ai-card blue">
+      <div class="ai-icon">📊</div>
+      <h3>GenomEQ</h3>
+      <p>Equity-aware genomic association pipeline that detects and corrects for ancestry bias in GWAS results. Built specifically for multi-ethnic studies.</p>
+      <a href="#" class="ai-link" style="color:#6b9fff">Access Tool →</a>
+    </div>
+    <div class="ai-card">
+      <div class="ai-icon">🔗</div>
+      <h3>FedHealth</h3>
+      <p>Federated learning framework for multi-site clinical prediction without data sharing. HIPAA-compliant, supports African and US hospital infrastructure.</p>
+      <a href="#" class="ai-link">Access Tool →</a>
+    </div>
+    <div class="ai-card orange">
+      <div class="ai-icon">⚡</div>
+      <h3>ProteoMap</h3>
+      <p>Automated proteomics workflow for tau and amyloid quantification. Integrates with mass-spec pipelines and provides AI-assisted annotation for AD biomarkers.</p>
+      <a href="#" class="ai-link" style="color:var(--orange)">Access Tool →</a>
+    </div>
+  </div>
+
+  <div class="ai-terminal reveal" style="margin-top:1.5px;">
+    <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd">genomAtlas query --disease "breast-cancer" --region "west-africa" --format vcf</span></div>
+    <div class="t-line t-out"><span>→ Searching 14,800 indexed datasets...</span></div>
+    <div class="t-line t-out"><span>→ Found <span class="t-highlight">312 matching datasets</span> in West Africa (BRCA, Genomics, Clinical)</span></div>
+    <div class="t-line t-out"><span>→ Top match: Pan-African Breast Cancer GWAS — Lagos 2024 [48,200 records]</span></div>
+    <div class="t-line t-out"><span>→ Metadata: <span class="t-highlight">hg38 · WGS · open-access · CC-BY-4.0</span></span></div>
+    <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd">genomAtlas download --id PAGC-2024-BRK --tool cancerseq-ai</span></div>
+    <div class="t-line t-out"><span>→ Initiating secure transfer... <span class="t-highlight">ready</span></span></div>
+    <div class="t-line"><span class="t-prompt">$</span><span class="t-cursor"></span></div>
+  </div>
+</section>
+
+<!-- COMMUNITY SECTION -->
+<section id="community">
+  <div class="section-label">Community & Collaboration</div>
+  <h2 class="section-title">Share Data &<br>Get Feedback</h2>
+  <p class="section-desc">Submit your research, upload datasets, and receive structured scientific feedback from the GenomAtlas community.</p>
+
+  <div class="community-grid reveal">
+    <div>
+      <div class="submit-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Your Name</label>
+            <input type="text" class="form-input" placeholder="Dr. Jane Smith">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Institution</label>
+            <input type="text" class="form-input" placeholder="University / Hospital">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Submission Type</label>
+          <select class="form-select">
+            <option>Dataset Upload</option>
+            <option>Research Publication</option>
+            <option>Preprint / Working Paper</option>
+            <option>AI Model / Pipeline</option>
+            <option>Feedback Request</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Disease / Research Area</label>
+          <select class="form-select">
+            <option>Cancer — Breast</option>
+            <option>Cancer — Cervical</option>
+            <option>Cancer — Colorectal</option>
+            <option>Cancer — Hepatocellular</option>
+            <option>Alzheimer's Disease</option>
+            <option>Computational Biology (General)</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Geographic Region</label>
+          <select class="form-select">
+            <option>United States</option>
+            <option>West Africa</option>
+            <option>East Africa</option>
+            <option>Central Africa</option>
+            <option>Southern Africa</option>
+            <option>North Africa</option>
+            <option>Global / Multi-region</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Abstract / Description</label>
+          <textarea class="form-textarea" placeholder="Brief description of your data or research..."></textarea>
+        </div>
+        <div class="upload-zone" onclick="this.querySelector('input').click()">
+          <input type="file" style="display:none" multiple>
+          <div class="upload-icon">📂</div>
+          <div class="upload-text"><span>Click to upload</span> or drag & drop<br>VCF, FASTQ, CSV, PDF, DICOM supported</div>
+        </div>
+        <button class="btn-primary" style="width:100%;text-align:center;">Submit for Review →</button>
+      </div>
+    </div>
+
+    <div class="community-info">
+      <div class="info-card">
+        <div class="info-icon">🔍</div>
+        <div class="info-body">
+          <h4>Peer Review Feedback</h4>
+          <p>All submissions are reviewed by qualified researchers in the relevant domain. You'll receive structured, constructive feedback within 14 days.</p>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon orange">🌍</div>
+        <div class="info-body">
+          <h4>Priority for African & Underrepresented Data</h4>
+          <p>Submissions from Africa and historically underrepresented populations receive expedited review and are actively sought to correct global data imbalances.</p>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">🔐</div>
+        <div class="info-body">
+          <h4>Data Sovereignty & Ethics</h4>
+          <p>All datasets retain attribution to their source institutions. Ethical review documentation is required for human subject data. We follow FAIR data principles.</p>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">📡</div>
+        <div class="info-body">
+          <h4>API Access</h4>
+          <p>Programmatic access to the full database via REST API. Authenticated researchers can query, stream, and integrate datasets into their own pipelines.</p>
+        </div>
+      </div>
+      <div style="border:1px solid var(--border);background:var(--surface);padding:1.8rem;">
+        <div class="vis-title" style="margin-bottom:1rem;">Recent Submissions</div>
+        <div style="display:flex;flex-direction:column;gap:0.8rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:0.8rem;">
+            <div>
+              <div style="font-size:0.82rem;font-weight:500;">Lung Cancer CT Dataset — Ethiopia</div>
+              <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--text3);margin-top:3px;">Imaging · 2,400 scans</div>
+            </div>
+            <span class="badge badge-af">Africa</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:0.8rem;">
+            <div>
+              <div style="font-size:0.82rem;font-weight:500;">AD Cognitive Decline Markers — US</div>
+              <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--text3);margin-top:3px;">Clinical · 890 patients</div>
+            </div>
+            <span class="badge badge-us">US</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-size:0.82rem;font-weight:500;">Colorectal Microbiome — Pan-African</div>
+              <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--text3);margin-top:3px;">Genomics · 3,100 samples</div>
+            </div>
+            <span class="badge badge-gl">Global</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="about">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <h2>GenomAtlas</h2>
+      <p>An open scientific platform for global public health research, with a focus on cancer, Alzheimer's disease, and AI-driven computational biology for the US, Africa, and the world.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <ul>
+        <li><a href="#">Database</a></li>
+        <li><a href="#">AI Tools</a></li>
+        <li><a href="#">API Access</a></li>
+        <li><a href="#">Submit Data</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Research</h4>
+      <ul>
+        <li><a href="#">Cancer Biology</a></li>
+        <li><a href="#">Alzheimer's</a></li>
+        <li><a href="#">Comp. Biology</a></li>
+        <li><a href="#">Publications</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>About</h4>
+      <ul>
+        <li><a href="#">Mission</a></li>
+        <li><a href="#">Team</a></li>
+        <li><a href="#">Ethics Policy</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 GenomAtlas — Global Health Research Repository</p>
+    <p>Built for science. Built for equity.</p>
+  </div>
+</footer>
+
+<script>
+  // Filter buttons interactivity
+  document.querySelectorAll('.db-filters .filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.db-filters .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // Reveal on scroll
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Staggered reveal for children
+  document.querySelectorAll('.research-grid, .focus-inner, .community-grid').forEach(grid => {
+    grid.querySelectorAll(':scope > *').forEach((child, i) => {
+      child.style.transitionDelay = `${i * 0.08}s`;
+    });
+  });
+</script>
+</body>
+</html>
+
